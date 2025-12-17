@@ -246,4 +246,4 @@ cf-shortlink-worker 遵循以下原则：
 
 ## 许可证
 
-推荐使用 **MIT License**。
+**MIT License**。
