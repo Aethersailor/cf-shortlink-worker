@@ -1,6 +1,8 @@
+**English** | [简体中文](README.zh-CN.md)
+
 # cf-shortlink-worker
 
-> 一个基于 Cloudflare Workers + KV 的轻量级短链接服务，内置现代化前端界面，兼容 SubWeb。
+> A lightweight short link service based on Cloudflare Workers + KV, featuring a modern UI and SubWeb compatibility.
 
 [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/Aethersailor/cf-shortlink-worker)
 
@@ -8,118 +10,118 @@
 
 ---
 
-## 📖 项目简介
+## 📖 Introduction
 
-**cf-shortlink-worker** 是一个运行在 **Cloudflare Workers** 上的 Serverless 短链接服务。它利用 **Workers KV** 进行低延迟的数据存储，旨在提供一个免费、高性能、免维护的短链解决方案。
+**cf-shortlink-worker** is a Serverless short link service running on **Cloudflare Workers**. It utilizes **Workers KV** for low-latency data storage, aiming to provide a free, high-performance, and maintenance-free short link solution.
 
-### 核心亮点
+### Key Features
 
-*   🎨 **现代化前端**: 内置精美的 Glassmorphism (毛玻璃) 风格首页。
-*   🌍 **多语言支持**: 内置 简体中文 / 繁體中文 / English，支持自动检测与即时切换。
-*   🌗 **深色模式**: 完美适配系统明暗主题，支持手动切换。
-*   📱 **多端适配**: 响应式设计，完美支持 PC 与移动端。
-*   ⚡ **高性能**: 依托 Cloudflare 全球边缘网络，毫秒级响应。
-*   🛡️ **防滥用**: 内置基于 Cache API 的 IP 高频访问限制。
-*   🔗 **兼容性**: API 接口完全兼容 SubWeb 格式 (POST form-data)。
-
----
-
-## 🚀 部署指南
-
-### 前置要求
-
-*   **Cloudflare 账号**: 您需要一个生效的 Cloudflare 账号。
-*   **域名 (推荐)**: 虽然 Worker 提供 `*.workers.dev` 域名，但该域名在部分地区可能无法访问，且看起来不正式。建议绑定这一托管在 Cloudflare 上的自定义域名。
-
-### 方式一：一键部署 (推荐)
-
-点击上方的 **[Deploy to Cloudflare Workers]** 按钮。
-
-1.  **授权**: 允许 Cloudflare 连接您的 GitHub 账号。
-2.  **配置**: 在部署页面，选择您的 Cloudflare 账户，建议项目名称填写 `shortlink`。
-3.  **部署**: 点击 `Deploy` 按钮，等待部署完成。
-4.  **关键步骤：绑定 KV 数据库**
-    *   一键部署虽然会创建 Worker，但通常**不会自动绑定 KV**，您必须手动完成此步，否则服务无法运行。
-    *   访问 [Cloudflare Dashboard](https://dash.cloudflare.com/)。
-    *   进入左侧菜单 `Workers & Pages` -> `KV`。
-    *   点击 `Create a namespace`，命名为 `LINKS`，点击 `Add`。
-    *   进入刚才部署好的 Worker (例如 `shortlink`) -> `Settings` (设置) -> `Variables` (变量)。
-    *   找到 `KV Namespace Bindings` (KV 命名空间绑定)，点击 `Add binding`。
-    *   **Variable name**: 填写 `LINKS` (**必须大写，完全一致**)。
-    *   **KV Namespace**: 选择刚才创建的 `LINKS`。
-    *   点击 `Save and deploy`。
-
-### 方式二：手动部署
-
-如果您喜欢完全掌控，可以手动操作：
-
-1.  **创建 KV 数据存储**
-    *   登录 Cloudflare 控制台，进入 `Workers & Pages` -> `KV`。
-    *   点击 `Create a namespace`。
-    *   输入名称 `LINKS`，点击 `Add`。
-
-2.  **创建 Worker 服务**
-    *   进入 `Workers & Pages` -> `Overview`。
-    *   点击 `Create application` -> `Create Worker`。
-    *   命名为 `shortlink` (或者您喜欢的名字)，点击 `Deploy`。
-
-3.  **写入代码**
-    *   进入刚才创建的 Worker，点击 `Edit code` (编辑代码)。
-    *   将本项目 [worker.js](worker.js) 的内容**完整复制**。
-    *   **覆盖**编辑器中原本的内容。
-
-4.  **绑定 KV (至关重要)**
-    *   回到 Worker 的配置页面 (不要在代码编辑器里)，点击 `Settings` -> `Variables`。
-    *   在 `KV Namespace Bindings` 区域，点击 `Add binding`。
-    *   **Variable name**: `LINKS`。
-    *   **KV Namespace**: 选择第 1 步创建的 `LINKS`。
-    *   点击 `Save and deploy`。
-
-5.  **完成**
-    *   访问您的 Worker 域名，应能看到短链首页。
+*   🎨 **Modern UI**: Built-in beautiful Glassmorphism landing page.
+*   🌍 **i18n Support**: Native support for Simplified Chinese / Traditional Chinese / English, with auto-detection and instant switching.
+*   🌗 **Dark Mode**: Perfectly adapts to system dark/light themes, with manual toggle support.
+*   📱 **Responsive Design**: Perfect support for both PC and mobile devices.
+*   ⚡ **High Performance**: Powered by Cloudflare's global edge network for millisecond-level response.
+*   🛡️ **Abuse Protection**: Built-in IP rate limiting based on Cache API.
+*   🔗 **Compatibility**: API interface fully compatible with SubWeb format (POST form-data).
 
 ---
 
-## ⚙️ 配置说明 (环境变量)
+## 🚀 Deployment Guide
 
-您可以通过设置环境变量来自定义服务。
-在 Worker 页面 -> `Settings` -> `Variables` -> `Environment Variables` 中添加：
+### Prerequisites
 
-### 🎨 前端配置
+*   **Cloudflare Account**: You need an active Cloudflare account.
+*   **Domain (Recommended)**: While Workers provide `*.workers.dev` domains, they may be inaccessible in some regions and look less professional. It is recommended to bind a custom domain managed on Cloudflare.
 
-| 变量名 | 说明 | 默认值 |
+### Method 1: On-Click Deployment (Recommended)
+
+Click the **[Deploy to Cloudflare Workers]** button above.
+
+1.  **Authorize**: Allow Cloudflare to connect to your GitHub account.
+2.  **Configure**: On the deployment page, select your Cloudflare account. We suggest using `shortlink` as the project name.
+3.  **Deploy**: Click the `Deploy` button and wait for completion.
+4.  **CRITICAL STEP: Binding KV Database**
+    *   One-click deployment creates the Worker but usually **DOES NOT automatically bind KV**. You must do this manually, otherwise the service will not run.
+    *   Visit [Cloudflare Dashboard](https://dash.cloudflare.com/).
+    *   Go to `Workers & Pages` -> `KV` on the left menu.
+    *   Click `Create a namespace`, name it `LINKS`, and click `Add`.
+    *   Go to your deployed Worker (e.g., `shortlink`) -> `Settings` -> `Variables`.
+    *   Find `KV Namespace Bindings`, click `Add binding`.
+    *   **Variable name**: Enter `LINKS` (**Must be uppercase, exact match**).
+    *   **KV Namespace**: Select the `LINKS` namespace you just created.
+    *   Click `Save and deploy`.
+
+### Method 2: Manual Deployment
+
+If you prefer full control, you can deploy manually:
+
+1.  **Create KV Namespace**
+    *   Log in to Cloudflare Dashboard, go to `Workers & Pages` -> `KV`.
+    *   Click `Create a namespace`.
+    *   Enter name `LINKS` and click `Add`.
+
+2.  **Create Worker Service**
+    *   Go to `Workers & Pages` -> `Overview`.
+    *   Click `Create application` -> `Create Worker`.
+    *   Name it `shortlink` (or any name you prefer), click `Deploy`.
+
+3.  **Write Code**
+    *   Enter the created Worker, click `Edit code`.
+    *   Copy the entire content of [worker.js](worker.js) from this project.
+    *   **Overwrite** the original content in the editor.
+
+4.  **Bind KV (Crucial)**
+    *   Go back to the Worker configuration page (not the code editor), click `Settings` -> `Variables`.
+    *   In the `KV Namespace Bindings` section, click `Add binding`.
+    *   **Variable name**: `LINKS`.
+    *   **KV Namespace**: Select the `LINKS` namespace created in Step 1.
+    *   Click `Save and deploy`.
+
+5.  **Finish**
+    *   Visit your Worker domain, and you should see the landing page.
+
+---
+
+## ⚙️ Configuration (Environment Variables)
+
+You can customize the service by setting environment variables.
+Go to Worker page -> `Settings` -> `Variables` -> `Environment Variables` to add:
+
+### 🎨 Frontend Configuration
+
+| Variable Name | Description | Default Value |
 | :--- | :--- | :--- |
-| `PAGE_TITLE` | 网页标题 | `Cloudflare ShortLink` |
-| `PAGE_ICON` | 网页图标 (Emoji) | `🔗` |
-| `PAGE_DESC` | 网页描述文本 | `Simple, fast, and secure short links.` |
+| `PAGE_TITLE` | Page Title | `Cloudflare ShortLink` |
+| `PAGE_ICON` | Page Icon (Emoji) | `🔗` |
+| `PAGE_DESC` | Page Description | `Simple, fast, and secure short links.` |
 
-### 🔧 核心配置
+### 🔧 Core Configuration
 
-| 变量名 | 说明 | 默认值 | 建议 |
+| Variable Name | Description | Default Value | Recommendation |
 | :--- | :--- | :--- | :--- |
-| `BASE_URL` | 短链的基础域名 | `当前 Worker 域名` | 建议配置自定义域名，如 `https://s.example.com` |
-| `RL_WINDOW_SEC` | 限流窗口时间(秒) | `60` | 公开服务建议 `60` |
-| `RL_MAX_REQ` | 窗口内最大请求数 | `10` | 公开服务建议 `5` |
-| `CORS_MODE` | 跨域模式 | `open` | `open`(全开) / `list`(白名单) / `off`(关闭) |
-| `CORS_ORIGINS` | 跨域白名单 | 空 | 仅 `CORS_MODE=list` 时生效，逗号分隔 |
+| `BASE_URL` | Base domain for short links | `Current Worker Domain` | Recommend using custom domain, e.g., `https://s.example.com` |
+| `RL_WINDOW_SEC` | Rate limit window (seconds) | `60` | `60` for public services |
+| `RL_MAX_REQ` | Max requests per window | `10` | `5` for public services |
+| `CORS_MODE` | CORS Mode | `open` | `open`(Allow All) / `list`(Allow List) / `off`(Disabled) |
+| `CORS_ORIGINS` | CORS Allow List | Empty | Comma separated, only works when `CORS_MODE=list` |
 
 ---
 
-## 🔗 API 文档
+## 🔗 API Reference
 
-### 1. 生成短链接
+### 1. Generate Short Link
 
 *   **URL**: `/short`
 *   **Method**: `POST`
-*   **Content-Type**: `multipart/form-data` 或 `application/x-www-form-urlencoded`
+*   **Content-Type**: `multipart/form-data` or `application/x-www-form-urlencoded`
 
-**参数**:
+**Parameters**:
 
-| 字段 | 类型 | 说明 |
+| Field | Type | Description |
 | :--- | :--- | :--- |
-| `longUrl` | String | **必填**。经过 Base64 编码的原始长链接。 |
+| `longUrl` | String | **Required**. Base64 encoded original long URL. |
 
-**请求示例**:
+**Request Example**:
 
 ```bash
 # Base64("https://example.com") = "aHR0cHM6Ly9leGFtcGxlLmNvbQ=="
@@ -127,7 +129,7 @@ curl -X POST https://s.your-domain.com/short \
      -F "longUrl=aHR0cHM6Ly9leGFtcGxlLmNvbQ=="
 ```
 
-**返回示例**:
+**Response Example**:
 
 ```json
 {
@@ -137,18 +139,18 @@ curl -X POST https://s.your-domain.com/short \
 }
 ```
 
-### 2. 访问短链接
+### 2. Access Short Link
 
 *   **URL**: `/:code`
 *   **Method**: `GET` / `HEAD`
 
-直接跳转 (HTTP 302) 到原始链接。
+Redirects (HTTP 302) to the original URL.
 
 ---
 
-## 🛠️ 开发与贡献
+## 🛠️ Development & Contribution
 
-欢迎提交 Issue 和 Pull Request！
+Issues and Pull Requests are welcome!
 
 *   **GitHub**: [https://github.com/Aethersailor/cf-shortlink-worker](https://github.com/Aethersailor/cf-shortlink-worker)
 *   **License**: [GPL-3.0](LICENSE)
