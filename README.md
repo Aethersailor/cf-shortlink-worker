@@ -1,249 +1,137 @@
 # cf-shortlink-worker
 
-一个兼容 SubWeb 的 Cloudflare Workers 短链接服务（Cloudflare Workers + KV）
+> 一个基于 Cloudflare Workers + KV 的轻量级短链接服务，内置现代化前端界面，兼容 SubWeb。
+
+🔗 **Demo**: [https://s.asailor.org](https://s.asailor.org)
 
 ---
 
-## 项目简介
+## 📖 项目简介
 
-**cf-shortlink-worker** 是一个基于 **Cloudflare Workers** 与 **Workers KV** 的轻量级短链接服务，专门面向 **SubWeb** 这类“浏览器端前端直接请求短链后端”的工作流。
+**cf-shortlink-worker** 是一个运行在 **Cloudflare Workers** 上的 Serverless 短链接服务。它利用 **Workers KV** 进行低延迟的数据存储，旨在提供一个免费、高性能、免维护的短链解决方案。
 
-本项目的设计目标：
+### 核心亮点
 
-- 兼容 SubWeb 的请求与返回格式（可直接替换 `shortUrl`）
-- 可自建、可控、无第三方短链依赖
-- 在 Cloudflare 免费额度内长期运行（读多写少、避免写放大）
-- 内置防滥用（免费方案可用）
-- CORS 支持并可配置“开放/白名单/关闭”三种模式
-
----
-
-## 核心特性
-
-- ✅ **接口行为兼容**
-  - `POST /short`
-  - `multipart/form-data`
-  - 参数：`longUrl = base64(url)`
-  - 返回：`{ "Code": 1, "ShortUrl": "..." }`
-
-- ✅ **短链跳转**
-  - `GET /:code` → `302`
-  - `HEAD /:code` → `302`（curl / 探测器兼容）
-
-- ✅ **Workers KV 存储**
-  - 存储：短码 → 长链接
-  - 读多写少，成本极低
-
-- ✅ **防滥用（免费）**
-  - 基于 Cloudflare Cache API 做 per-IP 限流
-  - 不依赖 Durable Objects
-  - 避免 KV 写放大
-
-- ✅ **CORS 三档模式（关键）**
-  - `open`（默认）：允许任意前端跨域读取响应（最省事，适合“给别人前端调用”）
-  - `list`：白名单模式（更安全，需配置 `CORS_ORIGINS`）
-  - `off`：关闭 CORS（不加任何 CORS 头）
-
-- ✅ **可选长链去重**
-  - 同一长链接可复用短码（可关闭）
-  - 减少 KV 写入次数
+*   🎨 **现代化前端**: 内置精美的 Glassmorphism (毛玻璃) 风格首页。
+*   🌍 **多语言支持**: 内置 简体中文 / 繁體中文 / English，支持自动检测与即时切换。
+*   🌗 **深色模式**: 完美适配系统明暗主题，支持手动切换。
+*   📱 **多端适配**: 响应式设计，完美支持 PC 与移动端。
+*   ⚡ **高性能**: 依托 Cloudflare 全球边缘网络，毫秒级响应。
+*   🛡️ **防滥用**: 内置基于 Cache API 的 IP 高频访问限制。
+*   🔗 **兼容性**: API 接口完全兼容 SubWeb 格式 (POST form-data)。
 
 ---
 
-## 非目标（设计上刻意不做）
+## 🚀 部署指南
 
-以下功能被明确排除在本项目范围之外：
+### 前置要求
 
-- 点击统计 / 访问计数
-- 访问日志
-- 后台管理面板
-- 用户系统 / 权限系统
+*   一个 Cloudflare 账号
+*   （推荐）一个托管在 Cloudflare 上的域名
 
-原因：这些功能通常会带来 KV 写放大、成本上升、架构复杂度增加与维护负担。
+### 1. 创建 KV 命名空间
+
+在 Cloudflare Dashboard 中：
+1.  进入 `Workers & Pages` -> `KV`。
+2.  点击 `Create a namespace`。
+3.  命名为 `LINKS` (建议)。
+4.  点击 `Add`。
+
+### 2. 创建 Worker
+
+1.  进入 `Workers & Pages` -> `Overview` -> `Create application` -> `Create Worker`。
+2.  命名您的 Worker (例如 `shortlink`)。
+3.  点击 `Deploy`。
+
+### 3. 配置代码
+
+1.  点击 `Edit code`。
+2.  将本项目 `worker.js` 的内容完整复制并覆盖编辑器中的代码。
+3.  点击 `Save and deploy`。
+
+### 4. 绑定 KV
+
+1.  回到 Worker 的配置页面，点击 `Settings` -> `Variables`。
+2.  找到 `KV Namespace Bindings`，点击 `Add binding`。
+3.  **Variable name**: 填写 `LINKS` (**必须与代码一致**)。
+4.  **KV Namespace**: 选择第 1 步创建的命名空间。
+5.  点击 `Save and deploy`。
 
 ---
 
-## API 接口说明
+## ⚙️ 配置说明 (环境变量)
 
-### 1) 创建短链接
+您可以通过设置环境变量来自定义服务。
+在 Worker 页面 -> `Settings` -> `Variables` -> `Environment Variables` 中添加：
 
-请求：
+### 🎨 前端配置
 
-- `POST /short`
-- `Content-Type: multipart/form-data`（SubWeb 默认）
-- 表单字段：`longUrl`（base64 编码后的完整 URL）
+| 变量名 | 说明 | 默认值 |
+| :--- | :--- | :--- |
+| `PAGE_TITLE` | 网页标题 | `Cloudflare ShortLink` |
+| `PAGE_ICON` | 网页图标 (Emoji) | `🔗` |
+| `PAGE_DESC` | 网页描述文本 | `Simple, fast, and secure short links.` |
 
-示例：
+### 🔧 核心配置
+
+| 变量名 | 说明 | 默认值 | 建议 |
+| :--- | :--- | :--- | :--- |
+| `BASE_URL` | 短链的基础域名 | `当前 Worker 域名` | 建议配置自定义域名，如 `https://s.example.com` |
+| `RL_WINDOW_SEC` | 限流窗口时间(秒) | `60` | 公开服务建议 `60` |
+| `RL_MAX_REQ` | 窗口内最大请求数 | `10` | 公开服务建议 `5` |
+| `CORS_MODE` | 跨域模式 | `open` | `open`(全开) / `list`(白名单) / `off`(关闭) |
+| `CORS_ORIGINS` | 跨域白名单 | 空 | 仅 `CORS_MODE=list` 时生效，逗号分隔 |
+
+---
+
+## 🔗 API 文档
+
+### 1. 生成短链接
+
+*   **URL**: `/short`
+*   **Method**: `POST`
+*   **Content-Type**: `multipart/form-data` 或 `application/x-www-form-urlencoded`
+
+**参数**:
+
+| 字段 | 类型 | 说明 |
+| :--- | :--- | :--- |
+| `longUrl` | String | **必填**。经过 Base64 编码的原始长链接。 |
+
+**请求示例**:
 
 ```bash
-curl -sS -X POST "https://s.example.com/short"   -F 'longUrl=aHR0cHM6Ly9leGFtcGxlLmNvbS8='
+# Base64("https://example.com") = "aHR0cHM6Ly9leGFtcGxlLmNvbQ=="
+curl -X POST https://s.your-domain.com/short \
+     -F "longUrl=aHR0cHM6Ly9leGFtcGxlLmNvbQ=="
 ```
 
-返回示例：
+**返回示例**:
 
 ```json
 {
   "Code": 1,
-  "ShortUrl": "https://s.example.com/AbCdEf1"
+  "ShortUrl": "https://s.your-domain.com/AbCd123",
+  "Message": ""
 }
 ```
 
-### 2) 使用短链接（跳转）
+### 2. 访问短链接
 
-- `GET /AbCdEf1` → `302 Location: <原始长链接>`
-- `HEAD /AbCdEf1` → `302 Location: <原始长链接>`
+*   **URL**: `/:code`
+*   **Method**: `GET` / `HEAD`
 
-示例：
-
-```bash
-curl -I "https://s.example.com/AbCdEf1"
-```
-
-预期输出类似：
-
-```txt
-HTTP/2 302
-location: https://example.com/
-```
+直接跳转 (HTTP 302) 到原始链接。
 
 ---
 
-## Cloudflare 部署流程（详细）
+## 🛠️ 开发与贡献
 
-### 第 1 步：创建 KV 命名空间
+欢迎提交 Issue 和 Pull Request！
 
-Cloudflare 控制台：`Workers & Pages -> KV`
-
-创建命名空间：
-
-- 名称：`LINKS`
-
-### 第 2 步：创建 Worker 并部署代码
-
-`Workers & Pages -> 创建 Worker`
-
-- 类型：Worker
-- 将仓库中的 `worker.js` 完整粘贴到编辑器
-- 保存并部署
-
-### 第 3 步：绑定 KV
-
-进入 Worker → `绑定（Bindings）` → 添加绑定：
-
-- 类型：KV 命名空间
-- **变量名（Binding name）：`LINKS`**
-- 命名空间：`LINKS`
-
-> 变量名必须与代码中使用的一致（本项目固定为 `LINKS`）。
-
-### 第 4 步：配置环境变量
-
-进入 Worker → `设置（Settings） -> 环境变量（Variables）`
-
-#### 必需
-
-- `BASE_URL`：短链对外展示的域名（建议使用自定义域名）
-  - 示例：`https://s.example.com`
-  - 测试阶段也可用 `https://xxx.your-account.workers.dev`（注意：workers.dev 在中国大陆地区无法直接访问）
-
-#### 推荐（公开服务更抗刷）
-
-- `RL_WINDOW_SEC`：限流窗口（秒），默认 `60`
-- `RL_MAX_REQ`：每 IP 在窗口内最大请求数，默认 `10`
-  - **建议公开服务使用 `5`**（例如：`RL_MAX_REQ=5`）
-
-#### CORS（重点）
-
-- `CORS_MODE`：CORS 模式（默认 `open`）
-  - `open`：允许任意 Origin 跨域读取响应（最省事）
-  - `list`：白名单模式（更安全）
-  - `off`：关闭 CORS（不加 CORS 头）
-
-- `CORS_ORIGINS`：仅在 `CORS_MODE=list` 时生效，逗号分隔
-  - 示例：
-    - `https://sub.example.com`
-    - `https://sub.example.com,https://sub2.example.com`
-
-> 说明：如果你的短链后端就是为了被“各种前端”调用（包括不受你控制的域名），可以保持默认 `CORS_MODE=open`；  
-> 如果你担心被滥用或只允许自家 SubWeb 使用，请改为 `CORS_MODE=list` 并配置 `CORS_ORIGINS`。
-
-#### 可选：长链去重
-
-- `DEDUP_TTL_SEC`：长链接去重 TTL（秒）
-  - 默认 `0` 表示关闭
-  - 示例：`2592000`（30 天）
+*   **GitHub**: [https://github.com/Aethersailor/cf-shortlink-worker](https://github.com/Aethersailor/cf-shortlink-worker)
+*   **License**: [GPL-3.0](LICENSE)
 
 ---
 
-## 第 5 步：绑定自定义域名（推荐）
-
-在 Worker 中添加路由（Routes）：
-
-- `s.example.com/*` → 指向该 Worker
-
-然后将 `BASE_URL` 改为：
-
-- `https://s.example.com`
-
-保存并重新部署。
-
----
-
-## 第 6 步：配置 SubWeb
-
-在 SubWeb 配置中设置：
-
-```txt
-shortUrl = https://s.example.com
-```
-
-注意：不需要加 `/short`，SubWeb 会自动请求 `POST /short`。
-
----
-
-## 常见问题（FAQ）
-
-### 1) 为什么 `curl -I` 需要支持？
-`curl -I` 发送的是 `HEAD` 请求。很多探测器/CDN/健康检查也会用 HEAD。  
-本项目对短码跳转同时支持 `GET` 与 `HEAD`，避免误判 404。
-
-### 2) 我想更安全：只允许我的 SubWeb 域名调用，怎么做？
-将环境变量设为：
-
-```txt
-CORS_MODE=list
-CORS_ORIGINS=https://sub.example.com
-```
-
-如有多个前端域名：
-
-```txt
-CORS_MODE=list
-CORS_ORIGINS=https://sub.example.com,https://sub2.example.com
-```
-
-### 3) 我想完全开放给任何前端用？
-保持默认即可：
-
-```txt
-CORS_MODE=open
-```
-
-（或不配置 `CORS_MODE`，默认就是 `open`）
-
----
-
-## 设计理念
-
-cf-shortlink-worker 遵循以下原则：
-
-- 优先使用 Cloudflare 原生能力
-- 避免任何高频写入状态（降低成本与故障面）
-- 成本可预测、接近于零
-- 行为明确、易于理解、易于维护
-
----
-
-## 许可证
-
-**MIT License**。
+**Based on Cloudflare Workers & KV.**
