@@ -2,6 +2,8 @@
 
 > 一个基于 Cloudflare Workers + KV 的轻量级短链接服务，内置现代化前端界面，兼容 SubWeb。
 
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/Aethersailor/cf-shortlink-worker)
+
 🔗 **Demo**: [https://s.asailor.org](https://s.asailor.org)
 
 ---
@@ -24,38 +26,24 @@
 
 ## 🚀 部署指南
 
-### 前置要求
+### 方式一：一键部署 (推荐)
 
-*   一个 Cloudflare 账号
-*   （推荐）一个托管在 Cloudflare 上的域名
+点击上方的 **[Deploy to Cloudflare Workers]** 按钮。
+1.  授权 Cloudflare 连接您的 GitHub 账号。
+2.  按照指引创建仓库副本。
+3.  部署完成后，进入 Cloudflare Dashboard：
+    *   **创建 KV**: 在 `Workers & Pages` -> `KV` 中创建一个命名空间 (如 `LINKS`)。
+    *   **绑定 KV**: 进入新部署的 Worker -> `Settings` -> `Variables` -> `KV Namespace Bindings`，添加绑定：
+        *   **Variable name**: `LINKS` (**必须精确**)
+        *   **KV Namespace**: 选择刚才创建的 `LINKS`
 
-### 1. 创建 KV 命名空间
 
-在 Cloudflare Dashboard 中：
-1.  进入 `Workers & Pages` -> `KV`。
-2.  点击 `Create a namespace`。
-3.  命名为 `LINKS` (建议)。
-4.  点击 `Add`。
+### 方式二：手动部署
 
-### 2. 创建 Worker
-
-1.  进入 `Workers & Pages` -> `Overview` -> `Create application` -> `Create Worker`。
-2.  命名您的 Worker (例如 `shortlink`)。
-3.  点击 `Deploy`。
-
-### 3. 配置代码
-
-1.  点击 `Edit code`。
-2.  将本项目 `worker.js` 的内容完整复制并覆盖编辑器中的代码。
-3.  点击 `Save and deploy`。
-
-### 4. 绑定 KV
-
-1.  回到 Worker 的配置页面，点击 `Settings` -> `Variables`。
-2.  找到 `KV Namespace Bindings`，点击 `Add binding`。
-3.  **Variable name**: 填写 `LINKS` (**必须与代码一致**)。
-4.  **KV Namespace**: 选择第 1 步创建的命名空间。
-5.  点击 `Save and deploy`。
+1.  **创建 KV**: 在 Cloudflare Dashboard 创建一个名为 `LINKS` 的 KV 命名空间。
+2.  **创建 Worker**: 创建一个新的 Worker 服务。
+3.  **复制代码**: 将本项目 `worker.js` 的内容完整复制到 Worker 编辑器中。
+4.  **绑定 KV**: 在 Worker 设置中添加 KV 绑定，变量名为 `LINKS`，指向您创建的 KV。
 
 ---
 

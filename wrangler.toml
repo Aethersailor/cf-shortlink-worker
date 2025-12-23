@@ -1,0 +1,11 @@
+name = "cf-shortlink"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# KV Namespace Binding
+# You must create a KV namespace and bind it here.
+# For local dev: wrangler kv:namespace create LINKS --preview
+# For production: wrangler kv:namespace create LINKS
+# [[kv_namespaces]]
+# binding = "LINKS"
+# id = "YOUR_KV_ID"
