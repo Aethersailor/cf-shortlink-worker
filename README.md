@@ -4,8 +4,6 @@
 
 > A lightweight short link service based on Cloudflare Workers + KV, featuring a modern UI and SubWeb compatibility.
 
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/Aethersailor/cf-shortlink-worker)
-
 🔗 **Demo**: [https://s.asailor.org](https://s.asailor.org)
 
 ---
@@ -34,6 +32,8 @@
 *   **Domain (Recommended)**: While Workers provide `*.workers.dev` domains, they may be inaccessible in some regions and look less professional. It is recommended to bind a custom domain managed on Cloudflare.
 
 ### Method 1: On-Click Deployment (Recommended)
+
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/Aethersailor/cf-shortlink-worker)
 
 Click the **[Deploy to Cloudflare Workers]** button above.
 

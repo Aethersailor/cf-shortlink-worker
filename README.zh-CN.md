@@ -4,8 +4,6 @@
 
 > 一个基于 Cloudflare Workers + KV 的轻量级短链接服务，内置现代化前端界面，兼容 SubWeb。
 
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/Aethersailor/cf-shortlink-worker)
-
 🔗 **Demo**: [https://s.asailor.org](https://s.asailor.org)
 
 ---
@@ -34,6 +32,8 @@
 *   **域名 (推荐)**: 虽然 Worker 提供 `*.workers.dev` 域名，但该域名在部分地区可能无法访问，且看起来不正式。建议绑定这一托管在 Cloudflare 上的自定义域名。
 
 ### 方式一：一键部署 (推荐)
+
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/Aethersailor/cf-shortlink-worker)
 
 点击上方的 **[Deploy to Cloudflare Workers]** 按钮。
 
