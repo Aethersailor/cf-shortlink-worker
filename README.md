@@ -152,6 +152,7 @@ curl -X POST https://s.your-domain.com/short \
 
 *   **GitHub**: [https://github.com/Aethersailor/cf-shortlink-worker](https://github.com/Aethersailor/cf-shortlink-worker)
 *   **License**: [GPL-3.0](LICENSE)
+*   **Copyright**: © 2025 Aethersailor
 
 ---
 
