@@ -1,28 +1,37 @@
 /**
- * cf-shortlink-worker (Service Worker syntax)
+ * cf-shortlink-worker
+ * https://github.com/Aethersailor/cf-shortlink-worker
  *
- * 目标：
- * - 兼容 SubWeb 的短链接接口
- * - POST /short  (FormData: longUrl=base64(url)) -> {Code:1, ShortUrl:"..."}
- * - GET/HEAD /:code -> 302 redirect
+ * A lightweight, serverless short link service built on Cloudflare Workers & KV.
+ * Features: Modern UI, i18n, Dark Mode, Rate Limiting, API compatible with SubWeb.
  *
- * Cloudflare:
- * - KV binding: LINKS
- * - Env var: BASE_URL (建议填 https://s.example.com)
+ * Copyright (c) 2025 Aethersailor
+ * Licensed under the GNU General Public License v3.0 (GPLv3)
  *
- * 可选环境变量（推荐）：
- * - RL_WINDOW_SEC   (默认 60)  限流窗口（秒）
- * - RL_MAX_REQ      (默认 10)  每 IP 每窗口最大请求次数
+ * -----------------------------------------------------------------------------
+ * 配置说明 (Environment Variables):
  *
- * CORS（重点改进）：
- * - CORS_MODE:
- *    - open (默认) : 允许任意 Origin 跨域读取响应（Access-Control-Allow-Origin: *）
- *    - list        : 白名单模式（使用 CORS_ORIGINS）
- *    - off         : 关闭 CORS（不加任何 CORS 头）
- * - CORS_ORIGINS   : 逗号分隔白名单，仅在 CORS_MODE=list 时生效
+ * [核心配置]
+ * - KV Namespace Binding : LINKS (必需)
+ * - BASE_URL             : 短链域名 (推荐设置，如 https://s.example.com)，若不填则自动推断
  *
- * 可选：长链去重（减少 KV 写入；默认关闭）
- * - DEDUP_TTL_SEC  : >0 启用，值为去重映射 TTL（秒），例如 2592000（30 天）
+ * [前端 UI]
+ * - PAGE_TITLE           : 网页标题 (默认: Cloudflare ShortLink)
+ * - PAGE_ICON            : 网页图标 (默认: 🔗)
+ * - PAGE_DESC            : 网页描述 (默认: Simple, fast, and secure short links.)
+ *
+ * [CORS 跨域设置]
+ * - CORS_MODE            : 'open' (默认全开，允许任意 Origin) | 'list' (白名单) | 'off' (关闭)
+ * - CORS_ORIGINS         : 允许的 Origin 列表 (逗号分隔)，仅 CORS_MODE=list 时生效
+ *
+ * [安全与限流]
+ * - RL_WINDOW_SEC        : 时间窗口，单位秒 (默认 60)
+ * - RL_MAX_REQ           : 窗口内最大请求次数 (默认 10)
+ *
+ * [高级配置]
+ * - DEDUP_TTL_SEC        : 长链去重缓存时间(秒)，>0 启用 (减少 KV 写入)
+ *
+ * -----------------------------------------------------------------------------
  */
 
 addEventListener("fetch", (event) => {
