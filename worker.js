@@ -3,33 +3,45 @@
  * https://github.com/Aethersailor/cf-shortlink-worker
  *
  * A lightweight, serverless short link service built on Cloudflare Workers & KV.
+ * 基于 Cloudflare Workers & KV 构建的轻量级 Serverless 短链接服务。
+ *
  * Features: Modern UI, i18n, Dark Mode, Rate Limiting, API compatible with SubWeb.
+ * 特性：现代化界面、多语言支持、深色模式、速率限制、API 兼容 SubWeb。
  *
  * Copyright (c) 2025 Aethersailor
  * Licensed under the GNU General Public License v3.0 (GPLv3)
  *
  * -----------------------------------------------------------------------------
- * 配置说明 (Environment Variables):
+ * Configuration / 配置说明 (Environment Variables):
  *
- * [核心配置]
- * - KV Namespace Binding : LINKS (必需)
- * - BASE_URL             : 短链域名 (推荐设置，如 https://s.example.com)，若不填则自动推断
+ * [Core / 核心配置]
+ * - KV Namespace Binding : LINKS (Required / 必需)
+ * - BASE_URL             : Custom Domain (Recommended, e.g. https://s.example.com)
+ *                          短链域名 (推荐设置，如 https://s.example.com)，若不填则自动推断
  *
- * [前端 UI]
- * - PAGE_TITLE           : 网页标题 (默认: Cloudflare ShortLink)
- * - PAGE_ICON            : 网页图标 (默认: 🔗)
- * - PAGE_DESC            : 网页描述 (默认: Simple, fast, and secure short links.)
+ * [Frontend UI / 前端界面]
+ * - PAGE_TITLE           : Page Title (Default: Cloudflare ShortLink)
+ *                          网页标题 (默认: Cloudflare ShortLink)
+ * - PAGE_ICON            : Page Favicon/Emoji (Default: 🔗)
+ *                          网页图标 (默认: 🔗)
+ * - PAGE_DESC            : Page Description (Default: Simple, fast, and secure short links.)
+ *                          网页描述 (默认: Simple, fast, and secure short links.)
  *
- * [CORS 跨域设置]
- * - CORS_MODE            : 'open' (默认全开，允许任意 Origin) | 'list' (白名单) | 'off' (关闭)
- * - CORS_ORIGINS         : 允许的 Origin 列表 (逗号分隔)，仅 CORS_MODE=list 时生效
+ * [CORS / 跨域设置]
+ * - CORS_MODE            : 'open' (Default, allow all) | 'list' (Allow-list) | 'off' (Disabled)
+ *                          'open' (默认全开) | 'list' (白名单) | 'off' (关闭)
+ * - CORS_ORIGINS         : Allowed Origins (Comma separated), only works when CORS_MODE=list
+ *                          允许的 Origin 列表 (逗号分隔)，仅 CORS_MODE=list 时生效
  *
- * [安全与限流]
- * - RL_WINDOW_SEC        : 时间窗口，单位秒 (默认 60)
- * - RL_MAX_REQ           : 窗口内最大请求次数 (默认 10)
+ * [Security & Rate Limiting / 安全与限流]
+ * - RL_WINDOW_SEC        : Rate Limit Window in seconds (Default: 60)
+ *                          时间窗口，单位秒 (默认 60)
+ * - RL_MAX_REQ           : Max requests per IP per window (Default: 10)
+ *                          窗口内最大请求次数 (默认 10)
  *
- * [高级配置]
- * - DEDUP_TTL_SEC        : 长链去重缓存时间(秒)，>0 启用 (减少 KV 写入)
+ * [Advanced / 高级配置]
+ * - DEDUP_TTL_SEC        : Deduplication Cache TTL (seconds), >0 to enable.
+ *                          长链去重缓存时间(秒)，>0 启用 (减少 KV 写入)
  *
  * -----------------------------------------------------------------------------
  */
