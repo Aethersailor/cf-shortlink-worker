@@ -5,8 +5,8 @@
  * A lightweight, serverless short link service built on Cloudflare Workers & KV.
  * 基于 Cloudflare Workers & KV 构建的轻量级 Serverless 短链接服务。
  *
- * Features: Modern UI, i18n, Dark Mode, Rate Limiting, API compatible with SubWeb.
- * 特性：现代化界面、多语言支持、深色模式、速率限制、API 兼容 SubWeb。
+ * Features: Modern UI, i18n, Dark Mode, Rate Limiting, API support.
+ * 特性：现代化界面、多语言支持、深色模式、速率限制、API 支持。
  *
  * Copyright (c) 2025 Aethersailor
  * Licensed under the GNU General Public License v3.0 (GPLv3)

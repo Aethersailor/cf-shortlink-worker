@@ -2,7 +2,7 @@
 
 # cf-shortlink-worker
 
-> 一个基于 Cloudflare Workers + KV 的轻量级短链接服务，内置现代化前端界面，兼容 SubWeb。
+> 一个基于 Cloudflare Workers + KV 的轻量级短链接服务，内置现代化前端界面。
 
 🔗 **Demo**: [https://s.asailor.org](https://s.asailor.org)
 
@@ -20,7 +20,7 @@
 *   📱 **多端适配**: 响应式设计，完美支持 PC 与移动端。
 *   ⚡ **高性能**: 依托 Cloudflare 全球边缘网络，毫秒级响应。
 *   🛡️ **防滥用**: 内置基于 Cache API 的 IP 高频访问限制。
-*   🔗 **兼容性**: API 接口完全兼容 SubWeb 格式 (POST form-data)。
+*   🔗 **API 接口**: 支持 POST form-data 格式创建短链接。
 
 ---
 

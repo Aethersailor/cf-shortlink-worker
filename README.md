@@ -2,7 +2,7 @@
 
 # cf-shortlink-worker
 
-> A lightweight short link service based on Cloudflare Workers + KV, featuring a modern UI and SubWeb compatibility.
+> A lightweight short link service based on Cloudflare Workers + KV, featuring a modern UI.
 
 🔗 **Demo**: [https://s.asailor.org](https://s.asailor.org)
 
@@ -20,7 +20,7 @@
 *   📱 **Responsive Design**: Perfect support for both PC and mobile devices.
 *   ⚡ **High Performance**: Powered by Cloudflare's global edge network for millisecond-level response.
 *   🛡️ **Abuse Protection**: Built-in IP rate limiting based on Cache API.
-*   🔗 **Compatibility**: API interface fully compatible with SubWeb format (POST form-data).
+*   🔗 **API Interface**: Supports POST form-data format for creating short links.
 
 ---
 
