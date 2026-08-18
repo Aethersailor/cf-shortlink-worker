@@ -153,7 +153,7 @@ curl -X POST https://s.your-domain.com/short \
 欢迎提交 Issue 和 Pull Request！
 
 *   **GitHub**: [https://github.com/Aethersailor/cf-shortlink-worker](https://github.com/Aethersailor/cf-shortlink-worker)
-*   **License**: [GPL-3.0](LICENSE)
+*   **License**: [AGPL-3.0](LICENSE)
 *   **Copyright**: © 2025 Aethersailor
 
 ---

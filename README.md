@@ -153,7 +153,7 @@ Redirects (HTTP 302) to the original URL.
 Issues and Pull Requests are welcome!
 
 *   **GitHub**: [https://github.com/Aethersailor/cf-shortlink-worker](https://github.com/Aethersailor/cf-shortlink-worker)
-*   **License**: [GPL-3.0](LICENSE)
+*   **License**: [AGPL-3.0](LICENSE)
 *   **Copyright**: © 2025 Aethersailor
 
 ---

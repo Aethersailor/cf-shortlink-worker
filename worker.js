@@ -9,7 +9,7 @@
  * 特性：现代化界面、多语言支持、深色模式、速率限制、API 支持。
  *
  * Copyright (c) 2025 Aethersailor
- * Licensed under the GNU General Public License v3.0 (GPLv3)
+ * Licensed under the GNU Affero General Public License v3.0 (AGPLv3)
  *
  * -----------------------------------------------------------------------------
  * Configuration / 配置说明 (Environment Variables):
